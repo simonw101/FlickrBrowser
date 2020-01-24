@@ -3,6 +3,7 @@ package com.example.flickrbrowser
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -31,11 +32,6 @@ class MainActivity : BaseActivity(), GetRawData.OndownloadComplete, GetFlickrJso
 
         recycler_view.adapter = flickrRecyclerViewAdapter
 
-        val url = createUri("https://www.flickr.com/services/feeds/photos_public.gne", "android,oreo","en-us", true)
-
-        val getRawData = GetRawData(this)
-
-        getRawData.execute(url)
 
     }
 
@@ -123,6 +119,22 @@ class MainActivity : BaseActivity(), GetRawData.OndownloadComplete, GetFlickrJso
     override fun onResume() {
         Log.d(TAG, ".onResume() starts")
         super.onResume()
+
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+
+        val queryResult = sharedPref.getString(FLICKR_QUERY, "")
+
+        if (queryResult!!.isNotEmpty()) {
+
+            val url = createUri("https://www.flickr.com/services/feeds/photos_public.gne", queryResult,"en-us", true)
+
+            val getRawData = GetRawData(this)
+
+            getRawData.execute(url)
+
+        }
+
+        Log.d(TAG, ".onresume: ends")
     }
 
 }
