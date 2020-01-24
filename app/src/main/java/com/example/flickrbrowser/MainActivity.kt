@@ -120,4 +120,9 @@ class MainActivity : BaseActivity(), GetRawData.OndownloadComplete, GetFlickrJso
         }
     }
 
+    override fun onResume() {
+        Log.d(TAG, ".onResume() starts")
+        super.onResume()
+    }
+
 }
